@@ -57,7 +57,7 @@ int main(int argc, const char **argv) {
 
   // Copy hex code to clipboard using pbcopy
   char command[50];
-  sprintf(command, "echo '#%02x%02x%02x' | pbcopy", (int)(red * 255),
+  sprintf(command, "echo '%02x%02x%02x' | pbcopy", (int)(red * 255),
           (int)(green * 255), (int)(blue * 255));
   system(command);
 
