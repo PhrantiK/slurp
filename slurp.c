@@ -55,9 +55,9 @@ int main(int argc, const char **argv) {
   green = (CGFloat)pixelData[1] / 255.0;
   blue = (CGFloat)pixelData[2] / 255.0;
 
-  // Copy hex code to clipboard using pbcopy
+  // Copy hex code to clipboard using pbcopy without a newline character
   char command[50];
-  sprintf(command, "echo '%02x%02x%02x' | pbcopy", (int)(red * 255),
+  sprintf(command, "printf '#%02x%02x%02x' | pbcopy", (int)(red * 255),
           (int)(green * 255), (int)(blue * 255));
   system(command);
 
