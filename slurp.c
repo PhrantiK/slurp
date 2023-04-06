@@ -61,6 +61,10 @@ int main(int argc, const char **argv) {
           (int)(green * 255), (int)(blue * 255));
   system(command);
 
+  sprintf(command, "hs -c 'hs.alert(\"#%02x%02x%02x\")'", (int)(red * 255),
+          (int)(green * 255), (int)(blue * 255));
+  system(command);
+
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-p") == 0) {
       printf("#%02x%02x%02x\n", (int)(red * 255), (int)(green * 255),
