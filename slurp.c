@@ -11,9 +11,13 @@
      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
  */
 
+#include "clip.h"
+#include <ApplicationServices/ApplicationServices.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+void copyToClipboard(const char *text);
 
 int main(int argc, const char **argv) {
   CGDirectDisplayID displayID = kCGDirectMainDisplay;
@@ -55,15 +59,10 @@ int main(int argc, const char **argv) {
   green = (CGFloat)pixelData[1] / 255.0;
   blue = (CGFloat)pixelData[2] / 255.0;
 
-  // Copy hex code to clipboard using pbcopy without a newline character
-  char command[50];
-  sprintf(command, "printf '#%02x%02x%02x' | pbcopy", (int)(red * 255),
-          (int)(green * 255), (int)(blue * 255));
-  system(command);
-
-  sprintf(command, "hs -c 'hs.alert(\"#%02x%02x%02x\")'", (int)(red * 255),
-          (int)(green * 255), (int)(blue * 255));
-  system(command);
+  char hexCode[8];
+  snprintf(hexCode, sizeof(hexCode), "#%02x%02x%02x", (int)(red * 255),
+           (int)(green * 255), (int)(blue * 255));
+  copyToClipboard(hexCode);
 
   for (int i = 1; i < argc; i++) {
     if (strcmp(argv[i], "-p") == 0) {
