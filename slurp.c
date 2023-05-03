@@ -11,7 +11,7 @@
      ░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░
  */
 
-#include "clip.h"
+// #include "clip.h"
 #include <ApplicationServices/ApplicationServices.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <stdio.h>
