@@ -14,10 +14,30 @@
 // #include "clip.h"
 #include <ApplicationServices/ApplicationServices.h>
 #include <CoreGraphics/CoreGraphics.h>
+#include <objc/objc-runtime.h>
 #include <stdio.h>
 #include <stdlib.h>
 
-void copyToClipboard(const char *text);
+void copyToClipboard(const char *text) {
+  Class NSString = objc_getClass("NSString");
+  id nsText = ((id(*)(Class, SEL, const char *))objc_msgSend)(
+      NSString, sel_registerName("stringWithUTF8String:"), text);
+
+  Class NSPasteboard = objc_getClass("NSPasteboard");
+  id pasteboard = ((id(*)(Class, SEL))objc_msgSend)(
+      NSPasteboard, sel_registerName("generalPasteboard"));
+
+  ((void (*)(id, SEL))objc_msgSend)(pasteboard,
+                                    sel_registerName("clearContents"));
+
+  // Create an NSArray with one element, nsText
+  Class NSArray = objc_getClass("NSArray");
+  id objectsToWrite = ((id(*)(Class, SEL, id))objc_msgSend)(
+      NSArray, sel_registerName("arrayWithObject:"), nsText);
+
+  ((void (*)(id, SEL, id))objc_msgSend)(
+      pasteboard, sel_registerName("writeObjects:"), objectsToWrite);
+}
 
 int main(int argc, const char **argv) {
   CGDirectDisplayID displayID = kCGDirectMainDisplay;
@@ -60,8 +80,9 @@ int main(int argc, const char **argv) {
   blue = (CGFloat)pixelData[2] / 255.0;
 
   char hexCode[8];
-  snprintf(hexCode, sizeof(hexCode), "#%02x%02x%02x", (int)(red * 255),
-           (int)(green * 255), (int)(blue * 255));
+  snprintf(hexCode, sizeof(hexCode), "#%02x%02x%02x", (int)(round(red * 255)),
+           (int)(round(green * 255)), (int)(round(blue * 255)));
+
   copyToClipboard(hexCode);
 
   for (int i = 1; i < argc; i++) {

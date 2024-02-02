@@ -4,7 +4,7 @@ LDFLAGS = -framework ApplicationServices -framework Foundation -framework AppKit
 
 all: slurp
 
-slurp: slurp.c clip.m
+slurp: slurp.c
 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
 clean:
